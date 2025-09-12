@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Sistema de Parqueadero</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>🅿️ Sistema de Parqueadero</h1>
+    <p>Gestión inteligente de vehículos</p>
+  </header>
+
+  <!-- Registro y Activos -->
+  <div class="container">
+    <div class="card">
+      <h2>Registrar Entrada</h2>
+      <input type="text" id="placa" placeholder="Placa del Vehículo (Ej: ABC123)">
+      <select id="tipoVehiculo">
+        <option value="">Seleccione tipo</option>
+        <option>Carro Particular</option>
+        <option>Moto</option>
+        <option>Buseta</option>
+        <option>Turbo</option>
+        <option>Pintor/Mecánico</option>
+      </select>
+      <input type="text" id="nombre" placeholder="Nombre de la Persona">
+      <select id="tipoPago">
+        <option value="">Seleccione tipo</option>
+        <option>Efectivo</option>
+        <option>Tarjeta</option>
+      </select>
+      <input type="number" id="monto" value="0">
+      <button onclick="registrarEntrada()">Registrar Entrada</button>
+    </div>
+
+    <div class="card">
+      <h2>Vehículos Activos</h2>
+      <div id="vehiculosActivos">No hay vehículos activos</div>
+    </div>
+  </div>
+
+  <!-- Historial -->
+  <div class="historial">
+    <h2>Historial de Vehículos</h2>
+    <div id="historialVehiculos"></div>
+  </div>
+
+  <!-- Reportes -->
+  <div class="reportes card">
+    <h2>Imprimir Reportes</h2>
+    <div class="btn-group">
+      <button class="active">Imprimir Todo</button>
+      <button>Carros Particulares</button>
+      <button>Motos</button>
+      <button>Busetas</button>
+      <button>Turbos</button>
+      <button>Pintores/Mecánicos</button>
+    </div>
+    <h2>Reporte Mensual</h2>
+    <input type="month" id="mesReporte">
+    <button>Generar Reporte Mensual</button>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
