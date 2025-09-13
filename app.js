@@ -1,145 +1,37 @@
-document.addEventListener("DOMContentLoaded", () => {
-  mostrarVehiculosActivos();
-
-  document.getElementById("formVehiculo").addEventListener("submit", e => {
-    e.preventDefault();
-    agregarVehiculo();
-  });
-});
-
-/* Guardar en LocalStorage */
-function agregarVehiculo() {
-  const placa = document.getElementById("placa").value;
-  const tipo = document.getElementById("tipo").value;
-  const propietario = document.getElementById("propietario").value;
-
-  const vehiculo = {
-    placa,
-    tipo,
-    propietario,
-    ingreso: new Date().toLocaleString(),
-    salida: null
-  };
-
-  const vehiculos = JSON.parse(localStorage.getItem("vehiculos")) || [];
-  vehiculos.push(vehiculo);
-  localStorage.setItem("vehiculos", JSON.stringify(vehiculos));
-
-  document.getElementById("formVehiculo").reset();
-  mostrarVehiculosActivos();
-}
-
-/* Mostrar en tabla activos */
-function mostrarVehiculosActivos() {
-  const activosBody = document.querySelector("#tablaActivos tbody");
-  activosBody.innerHTML = "";
-
-  const vehiculos = JSON.parse(localStorage.getItem("vehiculos")) || [];
-  vehiculos.forEach(v => {
-    const row = document.createElement("tr");
-    row.innerHTML = `
-      <td>${v.placa}</td>
-      <td>${v.tipo}</td>
-      <td>${v.propietario}</td>
-      <td>${v.ingreso}</td>
-      <td>${v.salida || "-"}</td>
-    `;
-    activosBody.appendChild(row);
-  });
-}
-
-/* Reporte Diario */
-function generarReporteDiario() {
-  const reporteBody = document.querySelector("#tablaReporteDiario tbody");
-  reporteBody.innerHTML = "";
-
-  const hoy = new Date().toLocaleDateString();
-  const vehiculos = JSON.parse(localStorage.getItem("vehiculos")) || [];
-
-  const filtrados = vehiculos.filter(v => v.ingreso.includes(hoy));
-
-  if (filtrados.length === 0) {
-    reporteBody.innerHTML = `<tr><td colspan="5">No hay registros hoy</td></tr>`;
-    return;
-  }
-
-  filtrados.forEach(v => {
-    const row = document.createElement("tr");
-    row.innerHTML = `
-      <td>${v.placa}</td>
-      <td>${v.tipo}</td>
-      <td>${v.propietario}</td>
-      <td>${v.ingreso}</td>
-      <td>${v.salida || "-"}</td>
-    `;
-    reporteBody.appendChild(row);
-  });
-}
-
-/* Reporte Mensual */
-function generarReporteMensual() {
-  const reporteBody = document.querySelector("#tablaReporteMensual tbody");
-  reporteBody.innerHTML = "";
-
-  const mesActual = new Date().getMonth();
-  const anioActual = new Date().getFullYear();
-
-  const vehiculos = JSON.parse(localStorage.getItem("vehiculos")) || [];
-  const filtrados = vehiculos.filter(v => {
-    const fecha = new Date(v.ingreso);
-    return fecha.getMonth() === mesActual && fecha.getFullYear() === anioActual;
-  });
-
-  if (filtrados.length === 0) {
-    reporteBody.innerHTML = `<tr><td colspan="5">No hay registros este mes</td></tr>`;
-    return;
-  }
-
-  filtrados.forEach(v => {
-    const row = document.createElement("tr");
-    row.innerHTML = `
-      <td>${v.placa}</td>
-      <td>${v.tipo}</td>
-      <td>${v.propietario}</td>
-      <td>${v.ingreso}</td>
-      <td>${v.salida || "-"}</td>
-    `;
-    reporteBody.appendChild(row);
-  });
-}
-
-/* Reporte General */
-function generarReporteGeneral() {
-  const reporteBody = document.querySelector("#tablaReporteGeneral tbody");
-  reporteBody.innerHTML = "";
-
-  const vehiculos = JSON.parse(localStorage.getItem("vehiculos")) || [];
-
-  if (vehiculos.length === 0) {
-    reporteBody.innerHTML = `<tr><td colspan="5">No hay registros</td></tr>`;
-    return;
-  }
-
-  vehiculos.forEach(v => {
-    const row = document.createElement("tr");
-    row.innerHTML = `
-      <td>${v.placa}</td>
-      <td>${v.tipo}</td>
-      <td>${v.propietario}</td>
-      <td>${v.ingreso}</td>
-      <td>${v.salida || "-"}</td>
-    `;
-    reporteBody.appendChild(row);
-  });
-}
-
-/* Imprimir Reporte */
 function imprimirReporte() {
-  const contenido = document.getElementById("reportes").innerHTML;
-  const ventana = window.open("", "", "width=800,height=600");
-  ventana.document.write("<html><head><title>Reporte</title></head><body>");
-  ventana.document.write(contenido);
-  ventana.document.write("</body></html>");
+  // Buscar cuál tabla tiene datos
+  let tabla = "";
+  if (document.querySelector("#tablaReporteDiario tbody").children.length > 0) {
+    tabla = document.getElementById("tablaReporteDiario").outerHTML;
+  } else if (document.querySelector("#tablaReporteMensual tbody").children.length > 0) {
+    tabla = document.getElementById("tablaReporteMensual").outerHTML;
+  } else if (document.querySelector("#tablaReporteGeneral tbody").children.length > 0) {
+    tabla = document.getElementById("tablaReporteGeneral").outerHTML;
+  } else {
+    alert("No hay datos para imprimir");
+    return;
+  }
+
+  const ventana = window.open("", "", "width=900,height=700");
+  ventana.document.write(`
+    <html>
+    <head>
+      <title>Reporte de Parqueadero</title>
+      <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        h2 { text-align: center; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
+        th { background: #2563eb; color: white; }
+        tr:nth-child(even) { background: #f1f5f9; }
+      </style>
+    </head>
+    <body>
+      <h2>Reporte de Parqueadero</h2>
+      ${tabla}
+    </body>
+    </html>
+  `);
   ventana.document.close();
   ventana.print();
 }

@@ -1,12 +1,19 @@
 body {
-  font-family: Arial, sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   margin: 20px;
-  background: #f4f4f9;
+  background: #f8fafc;
   color: #333;
 }
 
-h1, h2 {
+h1 {
   text-align: center;
+  margin-bottom: 30px;
+  color: #1e293b;
+}
+
+h2 {
+  color: #0f172a;
+  margin-bottom: 15px;
 }
 
 .container {
@@ -15,27 +22,41 @@ h1, h2 {
   margin-bottom: 30px;
 }
 
-/* Formularios */
+/* Tarjetas */
+.form-section, .activos-section, #reportes {
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* Formulario */
 form {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
 }
 
-input, select, button {
-  padding: 10px;
-  font-size: 14px;
+input, select {
+  padding: 12px;
+  font-size: 15px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
 }
 
 button {
-  background: #007bff;
+  padding: 12px;
+  background: #2563eb;
   color: #fff;
   border: none;
+  border-radius: 8px;
+  font-size: 15px;
   cursor: pointer;
+  transition: background 0.3s ease;
 }
 
 button:hover {
-  background: #0056b3;
+  background: #1e40af;
 }
 
 /* Tablas */
@@ -43,15 +64,26 @@ table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 15px;
+  font-size: 14px;
 }
 
-th, td {
-  border: 1px solid #ccc;
-  padding: 8px;
+th {
+  background: #2563eb;
+  color: white;
+  padding: 10px;
+}
+
+td {
+  border: 1px solid #ddd;
+  padding: 10px;
   text-align: center;
 }
 
-/* Grupo de botones */
+tr:nth-child(even) {
+  background: #f1f5f9;
+}
+
+/* Botones de reportes */
 .btn-group {
   display: flex;
   gap: 10px;
@@ -62,15 +94,12 @@ th, td {
 
 .btn-group button {
   flex: 1;
+  min-width: 120px;
 }
 
-/* --- Responsive --- */
+/* Responsive */
 @media (max-width: 768px) {
   .container {
     flex-direction: column;
-  }
-
-  input, select, button {
-    font-size: 16px;
   }
 }
