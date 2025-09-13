@@ -1,53 +1,60 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Sistema de Parqueadero</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Parqueadero App v3</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header>
-    <h1>🅿️ Registro de Parqueadero</h1>
+    <h1>🚗 Parqueadero App v3</h1>
   </header>
 
-  <main class="main-container">
-    <section class="card form-section">
-      <h2>Registrar Vehículo</h2>
-      <form id="formVehiculo">
-        <input type="text" id="placa" placeholder="Placa" required />
+  <main class="container">
+    <!-- Registro -->
+    <section class="registro">
+      <h2>Registro de Vehículos</h2>
+      <form id="formRegistro">
+        <label>Placa:
+          <input type="text" id="placa" required>
+        </label>
 
-        <select id="tipo" required>
-          <option value="">Seleccione tipo</option>
-          <option value="Carro">Carro</option>
-          <option value="Moto">Moto</option>
-          <option value="Buseta">Buseta</option>
-          <option value="Turbo">Turbo</option>
-          <option value="Pintores">Pintores</option>
-        </select>
+        <label>Tipo:
+          <select id="tipo" required>
+            <option value="">Seleccione...</option>
+            <option value="Carro">Carro</option>
+            <option value="Moto">Moto</option>
+            <option value="Buseta">Buseta</option>
+            <option value="Pintores">Pintores</option>
+          </select>
+        </label>
 
-        <select id="subtipo" style="display:none;">
-          <option value="">Seleccione empresa</option>
-          <option value="Lusitania">Lusitania</option>
-          <option value="Cotrander">Cotrander</option>
-          <option value="Flotax">Flotax</option>
-          <option value="San Juan">San Juan</option>
-          <option value="Unitransa">Unitransa</option>
-          <option value="Escolar">Escolar</option>
-        </select>
+        <label id="subtipoContainer" style="display:none;">Subtipo (solo buseta):
+          <select id="subtipo">
+            <option value="Lusitania">Lusitania</option>
+            <option value="Cotrander">Cotrander</option>
+            <option value="Flotax">Flotax</option>
+            <option value="San Juan">San Juan</option>
+            <option value="Unitransa">Unitransa</option>
+            <option value="Escolar">Escolar</option>
+          </select>
+        </label>
 
-        <input type="text" id="propietario" placeholder="Propietario" required />
+        <label>Propietario:
+          <input type="text" id="propietario" required>
+        </label>
 
-        <input type="number" id="precio" placeholder="Precio (COP)" min="0" required />
+        <label>Precio:
+          <input type="number" id="precio" required>
+        </label>
 
-        <div class="actions">
-          <button type="submit" class="primary">Agregar Vehículo</button>
-          <button type="button" id="limpiarBtn">Limpiar</button>
-        </div>
+        <button type="submit">Registrar</button>
       </form>
     </section>
 
-    <section class="card activos-section">
+    <!-- Activos -->
+    <section class="activos">
       <h2>Vehículos Activos</h2>
       <table id="tablaActivos">
         <thead>
@@ -58,7 +65,6 @@
             <th>Propietario</th>
             <th>Precio</th>
             <th>Ingreso</th>
-            <th>Salida</th>
             <th>Acción</th>
           </tr>
         </thead>
@@ -67,32 +73,33 @@
     </section>
   </main>
 
-  <section class="card reportes" id="reportes">
+  <!-- Reportes -->
+  <section class="reportes">
     <h2>Reportes</h2>
     <div class="btn-group">
-      <button onclick="generarReporteDiario()">Reporte Diario</button>
-      <button onclick="generarReporteMensual()">Reporte Mensual</button>
-      <button onclick="generarReporteGeneral()">Reporte General</button>
+      <button onclick="generarReporte('diario')">Reporte Diario</button>
+      <button onclick="generarReporte('mensual')">Reporte Mensual</button>
+      <button onclick="generarReporte('general')">Reporte General</button>
       <button onclick="imprimirReporte()">Imprimir Reporte</button>
     </div>
-
-    <div class="tables-wrapper">
-      <table id="tablaReporteDiario" class="report-table">
-        <thead><tr><th>Placa</th><th>Tipo</th><th>Subtipo</th><th>Propietario</th><th>Precio</th><th>Ingreso</th><th>Salida</th></tr></thead>
-        <tbody></tbody>
-      </table>
-
-      <table id="tablaReporteMensual" class="report-table">
-        <thead><tr><th>Placa</th><th>Tipo</th><th>Subtipo</th><th>Propietario</th><th>Precio</th><th>Ingreso</th><th>Salida</th></tr></thead>
-        <tbody></tbody>
-      </table>
-
-      <table id="tablaReporteGeneral" class="report-table">
-        <thead><tr><th>Placa</th><th>Tipo</th><th>Subtipo</th><th>Propietario</th><th>Precio</th><th>Ingreso</th><th>Salida</th></tr></thead>
-        <tbody></tbody>
-      </table>
-    </div>
+    <table id="tablaReportes">
+      <thead>
+        <tr>
+          <th>Placa</th>
+          <th>Tipo</th>
+          <th>Subtipo</th>
+          <th>Propietario</th>
+          <th>Precio</th>
+          <th>Ingreso</th>
+          <th>Salida</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
   </section>
+
+  <!-- Toast -->
+  <div id="toast" class="toast"></div>
 
   <script src="app.js"></script>
 </body>
