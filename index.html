@@ -3,104 +3,57 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Parqueadero App v3</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Parqueadero App v5</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-  <header>
-    <h1>🚗 Parqueadero App v3</h1>
-  </header>
+<body class="bg-gray-100 text-gray-800">
+  <div class="max-w-5xl mx-auto p-4">
+    <h1 class="text-3xl font-bold text-center text-blue-600 mb-6">🚗 Gestión de Parqueadero</h1>
 
-  <main class="container">
     <!-- Registro -->
-    <section class="registro">
-      <h2>Registro de Vehículos</h2>
-      <form id="formRegistro">
-        <label>Placa:
-          <input type="text" id="placa" required>
-        </label>
-
-        <label>Tipo:
-          <select id="tipo" required>
-            <option value="">Seleccione...</option>
-            <option value="Carro">Carro</option>
-            <option value="Moto">Moto</option>
-            <option value="Buseta">Buseta</option>
-            <option value="Pintores">Pintores</option>
-          </select>
-        </label>
-
-        <label id="subtipoContainer" style="display:none;">Subtipo (solo buseta):
-          <select id="subtipo">
-            <option value="Lusitania">Lusitania</option>
-            <option value="Cotrander">Cotrander</option>
-            <option value="Flotax">Flotax</option>
-            <option value="San Juan">San Juan</option>
-            <option value="Unitransa">Unitransa</option>
-            <option value="Escolar">Escolar</option>
-          </select>
-        </label>
-
-        <label>Propietario:
-          <input type="text" id="propietario" required>
-        </label>
-
-        <label>Precio:
-          <input type="number" id="precio" required>
-        </label>
-
-        <button type="submit">Registrar</button>
+    <section class="mb-8 bg-white p-6 rounded-2xl shadow">
+      <h2 class="text-xl font-semibold mb-4">Registro de Vehículos</h2>
+      <form id="registroForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <input type="text" id="placa" placeholder="Placa" required class="p-2 border rounded-lg">
+        <select id="tipo" required class="p-2 border rounded-lg">
+          <option value="">Seleccionar tipo</option>
+          <option value="Carro">Carro</option>
+          <option value="Moto">Moto</option>
+          <option value="Buseta">Buseta</option>
+          <option value="Pintores">Pintores</option>
+        </select>
+        <select id="subtipo" class="p-2 border rounded-lg">
+          <option value="">Subtipo (si aplica)</option>
+          <option value="Lusitania">Lusitania</option>
+          <option value="Cotrander">Cotrander</option>
+          <option value="Flotax">Flotax</option>
+          <option value="San Juan">San Juan</option>
+          <option value="Unitransa">Unitransa</option>
+          <option value="Escolar">Escolar</option>
+        </select>
+        <input type="text" id="propietario" placeholder="Propietario" required class="p-2 border rounded-lg">
+        <input type="number" id="precio" placeholder="Precio" required class="p-2 border rounded-lg">
+        <button type="submit" class="bg-blue-600 hover:bg-blue-800 text-white py-2 px-4 rounded-lg shadow col-span-1 md:col-span-2">Registrar</button>
       </form>
     </section>
 
-    <!-- Activos -->
-    <section class="activos">
-      <h2>Vehículos Activos</h2>
-      <table id="tablaActivos">
-        <thead>
-          <tr>
-            <th>Placa</th>
-            <th>Tipo</th>
-            <th>Subtipo</th>
-            <th>Propietario</th>
-            <th>Precio</th>
-            <th>Ingreso</th>
-            <th>Acción</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
+    <!-- Vehículos activos -->
+    <section class="mb-8 bg-white p-6 rounded-2xl shadow">
+      <h2 class="text-xl font-semibold mb-4">Vehículos Activos</h2>
+      <div id="vehiculosActivos" class="overflow-x-auto"></div>
     </section>
-  </main>
 
-  <!-- Reportes -->
-  <section class="reportes">
-    <h2>Reportes</h2>
-    <div class="btn-group">
-      <button onclick="generarReporte('diario')">Reporte Diario</button>
-      <button onclick="generarReporte('mensual')">Reporte Mensual</button>
-      <button onclick="generarReporte('general')">Reporte General</button>
-      <button onclick="imprimirReporte()">Imprimir Reporte</button>
-    </div>
-    <table id="tablaReportes">
-      <thead>
-        <tr>
-          <th>Placa</th>
-          <th>Tipo</th>
-          <th>Subtipo</th>
-          <th>Propietario</th>
-          <th>Precio</th>
-          <th>Ingreso</th>
-          <th>Salida</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-  </section>
+    <!-- Reportes -->
+    <section class="mb-8 bg-white p-6 rounded-2xl shadow">
+      <h2 class="text-xl font-semibold mb-4">Reportes</h2>
+      <button onclick="imprimirReporte()" class="bg-green-600 hover:bg-green-800 text-white py-2 px-4 rounded-lg shadow mb-4">Imprimir Reporte</button>
+      <div id="reporteTabla" class="overflow-x-auto"></div>
+    </section>
+  </div>
 
   <!-- Toast -->
-  <div id="toast" class="toast"></div>
+  <div id="toast" class="fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded-lg shadow hidden"></div>
 
-  <script src="app.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
