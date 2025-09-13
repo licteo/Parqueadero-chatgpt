@@ -22,7 +22,6 @@ h2 {
   margin-bottom: 30px;
 }
 
-/* Tarjetas */
 .form-section, .activos-section, #reportes {
   background: #fff;
   padding: 20px;
@@ -30,7 +29,6 @@ h2 {
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
-/* Formulario */
 form {
   display: flex;
   flex-direction: column;
@@ -59,7 +57,6 @@ button:hover {
   background: #1e40af;
 }
 
-/* Tablas */
 table {
   width: 100%;
   border-collapse: collapse;
@@ -83,7 +80,6 @@ tr:nth-child(even) {
   background: #f1f5f9;
 }
 
-/* Botones de reportes */
 .btn-group {
   display: flex;
   gap: 10px;
@@ -97,7 +93,6 @@ tr:nth-child(even) {
   min-width: 120px;
 }
 
-/* Responsive */
 @media (max-width: 768px) {
   .container {
     flex-direction: column;

@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Parqueadero</title>
+  <title>Sistema de Parqueadero</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <h1>Registro de Parqueadero</h1>
 
   <div class="container">
-    <!-- Formulario -->
+    <!-- Registro -->
     <div class="form-section">
       <h2>Registrar Vehículo</h2>
       <form id="formVehiculo">
@@ -19,6 +19,8 @@
           <option value="">Seleccione tipo</option>
           <option value="Carro">Carro</option>
           <option value="Moto">Moto</option>
+          <option value="Buseta">Buseta</option>
+          <option value="Turbo">Turbo</option>
         </select>
         <input type="text" id="propietario" placeholder="Propietario" required>
         <button type="submit">Agregar Vehículo</button>
@@ -55,39 +57,21 @@
 
     <table id="tablaReporteDiario">
       <thead>
-        <tr>
-          <th>Placa</th>
-          <th>Tipo</th>
-          <th>Propietario</th>
-          <th>Ingreso</th>
-          <th>Salida</th>
-        </tr>
+        <tr><th>Placa</th><th>Tipo</th><th>Propietario</th><th>Ingreso</th><th>Salida</th></tr>
       </thead>
       <tbody></tbody>
     </table>
 
     <table id="tablaReporteMensual">
       <thead>
-        <tr>
-          <th>Placa</th>
-          <th>Tipo</th>
-          <th>Propietario</th>
-          <th>Ingreso</th>
-          <th>Salida</th>
-        </tr>
+        <tr><th>Placa</th><th>Tipo</th><th>Propietario</th><th>Ingreso</th><th>Salida</th></tr>
       </thead>
       <tbody></tbody>
     </table>
 
     <table id="tablaReporteGeneral">
       <thead>
-        <tr>
-          <th>Placa</th>
-          <th>Tipo</th>
-          <th>Propietario</th>
-          <th>Ingreso</th>
-          <th>Salida</th>
-        </tr>
+        <tr><th>Placa</th><th>Tipo</th><th>Propietario</th><th>Ingreso</th><th>Salida</th></tr>
       </thead>
       <tbody></tbody>
     </table>
