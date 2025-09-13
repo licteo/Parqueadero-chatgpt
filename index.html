@@ -1,52 +1,73 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Sistema de Parqueadero</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h1>Registro de Parqueadero</h1>
+  <header>
+    <h1>🅿️ Registro de Parqueadero</h1>
+  </header>
 
-  <div class="container">
-    <!-- Registro -->
-    <div class="form-section">
+  <main class="main-container">
+    <section class="card form-section">
       <h2>Registrar Vehículo</h2>
       <form id="formVehiculo">
-        <input type="text" id="placa" placeholder="Placa" required>
+        <input type="text" id="placa" placeholder="Placa" required />
+
         <select id="tipo" required>
           <option value="">Seleccione tipo</option>
           <option value="Carro">Carro</option>
           <option value="Moto">Moto</option>
           <option value="Buseta">Buseta</option>
           <option value="Turbo">Turbo</option>
+          <option value="Pintores">Pintores</option>
         </select>
-        <input type="text" id="propietario" placeholder="Propietario" required>
-        <button type="submit">Agregar Vehículo</button>
-      </form>
-    </div>
 
-    <!-- Activos -->
-    <div class="activos-section">
+        <select id="subtipo" style="display:none;">
+          <option value="">Seleccione empresa</option>
+          <option value="Lusitania">Lusitania</option>
+          <option value="Cotrander">Cotrander</option>
+          <option value="Flotax">Flotax</option>
+          <option value="San Juan">San Juan</option>
+          <option value="Unitransa">Unitransa</option>
+          <option value="Escolar">Escolar</option>
+        </select>
+
+        <input type="text" id="propietario" placeholder="Propietario" required />
+
+        <input type="number" id="precio" placeholder="Precio (COP)" min="0" required />
+
+        <div class="actions">
+          <button type="submit" class="primary">Agregar Vehículo</button>
+          <button type="button" id="limpiarBtn">Limpiar</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="card activos-section">
       <h2>Vehículos Activos</h2>
       <table id="tablaActivos">
         <thead>
           <tr>
             <th>Placa</th>
             <th>Tipo</th>
+            <th>Subtipo</th>
             <th>Propietario</th>
+            <th>Precio</th>
             <th>Ingreso</th>
             <th>Salida</th>
+            <th>Acción</th>
           </tr>
         </thead>
         <tbody></tbody>
       </table>
-    </div>
-  </div>
+    </section>
+  </main>
 
-  <!-- Reportes -->
-  <div id="reportes">
+  <section class="card reportes" id="reportes">
     <h2>Reportes</h2>
     <div class="btn-group">
       <button onclick="generarReporteDiario()">Reporte Diario</button>
@@ -55,27 +76,23 @@
       <button onclick="imprimirReporte()">Imprimir Reporte</button>
     </div>
 
-    <table id="tablaReporteDiario">
-      <thead>
-        <tr><th>Placa</th><th>Tipo</th><th>Propietario</th><th>Ingreso</th><th>Salida</th></tr>
-      </thead>
-      <tbody></tbody>
-    </table>
+    <div class="tables-wrapper">
+      <table id="tablaReporteDiario" class="report-table">
+        <thead><tr><th>Placa</th><th>Tipo</th><th>Subtipo</th><th>Propietario</th><th>Precio</th><th>Ingreso</th><th>Salida</th></tr></thead>
+        <tbody></tbody>
+      </table>
 
-    <table id="tablaReporteMensual">
-      <thead>
-        <tr><th>Placa</th><th>Tipo</th><th>Propietario</th><th>Ingreso</th><th>Salida</th></tr>
-      </thead>
-      <tbody></tbody>
-    </table>
+      <table id="tablaReporteMensual" class="report-table">
+        <thead><tr><th>Placa</th><th>Tipo</th><th>Subtipo</th><th>Propietario</th><th>Precio</th><th>Ingreso</th><th>Salida</th></tr></thead>
+        <tbody></tbody>
+      </table>
 
-    <table id="tablaReporteGeneral">
-      <thead>
-        <tr><th>Placa</th><th>Tipo</th><th>Propietario</th><th>Ingreso</th><th>Salida</th></tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-  </div>
+      <table id="tablaReporteGeneral" class="report-table">
+        <thead><tr><th>Placa</th><th>Tipo</th><th>Subtipo</th><th>Propietario</th><th>Precio</th><th>Ingreso</th><th>Salida</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
 
   <script src="app.js"></script>
 </body>
