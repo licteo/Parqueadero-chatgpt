@@ -1,90 +1,67 @@
 body {
   font-family: Arial, sans-serif;
-  background: #f0f6ff;
-  margin: 0;
-  padding: 0;
+  margin: 20px;
+  background: #f4f4f9;
+  color: #333;
 }
 
-header {
-  background: #fff;
-  padding: 20px;
+h1, h2 {
   text-align: center;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-
-header h1 {
-  color: #2563eb;
-  margin: 0;
-}
-
-header p {
-  color: #555;
-  margin: 5px 0 0;
 }
 
 .container {
   display: flex;
   gap: 20px;
-  padding: 20px;
+  margin-bottom: 30px;
 }
 
-.card {
-  background: #fff;
-  border-radius: 10px;
-  padding: 20px;
-  flex: 1;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-}
-
-.card h2 {
-  margin-bottom: 15px;
+/* Formularios */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 input, select, button {
-  width: 100%;
   padding: 10px;
-  margin: 8px 0;
-  border-radius: 5px;
-  border: 1px solid #ddd;
+  font-size: 14px;
 }
 
 button {
-  background: #2563eb;
+  background: #007bff;
   color: #fff;
   border: none;
   cursor: pointer;
-  font-weight: bold;
 }
 
 button:hover {
-  background: #1d4ed8;
+  background: #0056b3;
 }
 
-.vehiculo {
-  border-bottom: 1px solid #eee;
-  padding: 10px 0;
+/* Tablas */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
 }
 
-.historial, .reportes {
-  margin: 20px;
+th, td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: center;
 }
 
-.historial-item {
-  background: #fff;
-  border-radius: 10px;
-  padding: 15px;
-  margin-bottom: 10px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+/* Grupo de botones */
+.btn-group {
+  display: flex;
+  gap: 10px;
+  margin: 15px 0;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .btn-group button {
-  width: auto;
-  margin-right: 10px;
-  background: #374151;
-}
-
-.btn-group button.active {
-  background: #2563eb;
+  flex: 1;
 }
 
 /* --- Responsive --- */
@@ -95,15 +72,5 @@ button:hover {
 
   input, select, button {
     font-size: 16px;
-  }
-
-  .btn-group {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-
-  .btn-group button {
-    flex: 1;
   }
 }

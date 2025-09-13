@@ -1,89 +1,145 @@
-let vehiculos = [];
-let historial = [];
+document.addEventListener("DOMContentLoaded", () => {
+  mostrarVehiculosActivos();
 
-function registrarEntrada() {
+  document.getElementById("formVehiculo").addEventListener("submit", e => {
+    e.preventDefault();
+    agregarVehiculo();
+  });
+});
+
+/* Guardar en LocalStorage */
+function agregarVehiculo() {
   const placa = document.getElementById("placa").value;
-  const tipoVehiculo = document.getElementById("tipoVehiculo").value;
-  const nombre = document.getElementById("nombre").value;
-  const tipoPago = document.getElementById("tipoPago").value;
-  const monto = document.getElementById("monto").value;
+  const tipo = document.getElementById("tipo").value;
+  const propietario = document.getElementById("propietario").value;
 
-  if(!placa || !tipoVehiculo || !nombre || !tipoPago) {
-    alert("Por favor, complete todos los campos.");
-    return;
-  }
-
-  const entrada = {
+  const vehiculo = {
     placa,
-    tipoVehiculo,
-    nombre,
-    tipoPago,
-    monto,
-    horaEntrada: new Date()
+    tipo,
+    propietario,
+    ingreso: new Date().toLocaleString(),
+    salida: null
   };
 
-  vehiculos.push(entrada);
-  mostrarVehiculos();
-  limpiarFormulario();
+  const vehiculos = JSON.parse(localStorage.getItem("vehiculos")) || [];
+  vehiculos.push(vehiculo);
+  localStorage.setItem("vehiculos", JSON.stringify(vehiculos));
+
+  document.getElementById("formVehiculo").reset();
+  mostrarVehiculosActivos();
 }
 
-function mostrarVehiculos() {
-  const contenedor = document.getElementById("vehiculosActivos");
-  contenedor.innerHTML = "";
-  if(vehiculos.length === 0) {
-    contenedor.innerHTML = "No hay vehículos activos";
+/* Mostrar en tabla activos */
+function mostrarVehiculosActivos() {
+  const activosBody = document.querySelector("#tablaActivos tbody");
+  activosBody.innerHTML = "";
+
+  const vehiculos = JSON.parse(localStorage.getItem("vehiculos")) || [];
+  vehiculos.forEach(v => {
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td>${v.placa}</td>
+      <td>${v.tipo}</td>
+      <td>${v.propietario}</td>
+      <td>${v.ingreso}</td>
+      <td>${v.salida || "-"}</td>
+    `;
+    activosBody.appendChild(row);
+  });
+}
+
+/* Reporte Diario */
+function generarReporteDiario() {
+  const reporteBody = document.querySelector("#tablaReporteDiario tbody");
+  reporteBody.innerHTML = "";
+
+  const hoy = new Date().toLocaleDateString();
+  const vehiculos = JSON.parse(localStorage.getItem("vehiculos")) || [];
+
+  const filtrados = vehiculos.filter(v => v.ingreso.includes(hoy));
+
+  if (filtrados.length === 0) {
+    reporteBody.innerHTML = `<tr><td colspan="5">No hay registros hoy</td></tr>`;
     return;
   }
 
-  vehiculos.forEach((v, index) => {
-    const div = document.createElement("div");
-    div.className = "vehiculo";
-    div.innerHTML = `
-      <strong>${v.placa}</strong> - ${v.tipoVehiculo}<br>
-      Entrada: ${v.horaEntrada.toLocaleString()}<br>
-      <button onclick="registrarSalida(${index})">Registrar Salida</button>
+  filtrados.forEach(v => {
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td>${v.placa}</td>
+      <td>${v.tipo}</td>
+      <td>${v.propietario}</td>
+      <td>${v.ingreso}</td>
+      <td>${v.salida || "-"}</td>
     `;
-    contenedor.appendChild(div);
+    reporteBody.appendChild(row);
   });
 }
 
-function registrarSalida(index) {
-  const vehiculo = vehiculos[index];
-  vehiculo.horaSalida = new Date();
+/* Reporte Mensual */
+function generarReporteMensual() {
+  const reporteBody = document.querySelector("#tablaReporteMensual tbody");
+  reporteBody.innerHTML = "";
 
-  const duracion = Math.ceil((vehiculo.horaSalida - vehiculo.horaEntrada) / (1000 * 60 * 60));
-  vehiculo.duracion = duracion;
-  vehiculo.costo = vehiculo.monto * duracion;
+  const mesActual = new Date().getMonth();
+  const anioActual = new Date().getFullYear();
 
-  historial.push(vehiculo);
-  vehiculos.splice(index, 1);
+  const vehiculos = JSON.parse(localStorage.getItem("vehiculos")) || [];
+  const filtrados = vehiculos.filter(v => {
+    const fecha = new Date(v.ingreso);
+    return fecha.getMonth() === mesActual && fecha.getFullYear() === anioActual;
+  });
 
-  mostrarVehiculos();
-  mostrarHistorial();
-}
+  if (filtrados.length === 0) {
+    reporteBody.innerHTML = `<tr><td colspan="5">No hay registros este mes</td></tr>`;
+    return;
+  }
 
-function mostrarHistorial() {
-  const contenedor = document.getElementById("historialVehiculos");
-  contenedor.innerHTML = "";
-
-  historial.forEach(v => {
-    const div = document.createElement("div");
-    div.className = "historial-item";
-    div.innerHTML = `
-      <strong>${v.placa}</strong> - ${v.tipoVehiculo}<br>
-      Entrada: ${v.horaEntrada.toLocaleString()}<br>
-      Salida: ${v.horaSalida.toLocaleString()}<br>
-      Duración: ${v.duracion} horas<br>
-      Costo Total: $${v.costo}
+  filtrados.forEach(v => {
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td>${v.placa}</td>
+      <td>${v.tipo}</td>
+      <td>${v.propietario}</td>
+      <td>${v.ingreso}</td>
+      <td>${v.salida || "-"}</td>
     `;
-    contenedor.appendChild(div);
+    reporteBody.appendChild(row);
   });
 }
 
-function limpiarFormulario() {
-  document.getElementById("placa").value = "";
-  document.getElementById("tipoVehiculo").value = "";
-  document.getElementById("nombre").value = "";
-  document.getElementById("tipoPago").value = "";
-  document.getElementById("monto").value = 0;
+/* Reporte General */
+function generarReporteGeneral() {
+  const reporteBody = document.querySelector("#tablaReporteGeneral tbody");
+  reporteBody.innerHTML = "";
+
+  const vehiculos = JSON.parse(localStorage.getItem("vehiculos")) || [];
+
+  if (vehiculos.length === 0) {
+    reporteBody.innerHTML = `<tr><td colspan="5">No hay registros</td></tr>`;
+    return;
+  }
+
+  vehiculos.forEach(v => {
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td>${v.placa}</td>
+      <td>${v.tipo}</td>
+      <td>${v.propietario}</td>
+      <td>${v.ingreso}</td>
+      <td>${v.salida || "-"}</td>
+    `;
+    reporteBody.appendChild(row);
+  });
+}
+
+/* Imprimir Reporte */
+function imprimirReporte() {
+  const contenido = document.getElementById("reportes").innerHTML;
+  const ventana = window.open("", "", "width=800,height=600");
+  ventana.document.write("<html><head><title>Reporte</title></head><body>");
+  ventana.document.write(contenido);
+  ventana.document.write("</body></html>");
+  ventana.document.close();
+  ventana.print();
 }

@@ -2,64 +2,95 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Sistema de Parqueadero</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Parqueadero</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header>
-    <h1>🅿️ Sistema de Parqueadero</h1>
-    <p>Gestión inteligente de vehículos</p>
-  </header>
+  <h1>Registro de Parqueadero</h1>
 
-  <!-- Registro y Activos -->
   <div class="container">
-    <div class="card">
-      <h2>Registrar Entrada</h2>
-      <input type="text" id="placa" placeholder="Placa del Vehículo (Ej: ABC123)">
-      <select id="tipoVehiculo">
-        <option value="">Seleccione tipo</option>
-        <option>Carro Particular</option>
-        <option>Moto</option>
-        <option>Buseta</option>
-        <option>Turbo</option>
-        <option>Pintor/Mecánico</option>
-      </select>
-      <input type="text" id="nombre" placeholder="Nombre de la Persona">
-      <select id="tipoPago">
-        <option value="">Seleccione tipo</option>
-        <option>Efectivo</option>
-        <option>Tarjeta</option>
-      </select>
-      <input type="number" id="monto" value="0">
-      <button onclick="registrarEntrada()">Registrar Entrada</button>
+    <!-- Formulario -->
+    <div class="form-section">
+      <h2>Registrar Vehículo</h2>
+      <form id="formVehiculo">
+        <input type="text" id="placa" placeholder="Placa" required>
+        <select id="tipo" required>
+          <option value="">Seleccione tipo</option>
+          <option value="Carro">Carro</option>
+          <option value="Moto">Moto</option>
+        </select>
+        <input type="text" id="propietario" placeholder="Propietario" required>
+        <button type="submit">Agregar Vehículo</button>
+      </form>
     </div>
 
-    <div class="card">
+    <!-- Activos -->
+    <div class="activos-section">
       <h2>Vehículos Activos</h2>
-      <div id="vehiculosActivos">No hay vehículos activos</div>
+      <table id="tablaActivos">
+        <thead>
+          <tr>
+            <th>Placa</th>
+            <th>Tipo</th>
+            <th>Propietario</th>
+            <th>Ingreso</th>
+            <th>Salida</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
     </div>
-  </div>
-
-  <!-- Historial -->
-  <div class="historial">
-    <h2>Historial de Vehículos</h2>
-    <div id="historialVehiculos"></div>
   </div>
 
   <!-- Reportes -->
-  <div class="reportes card">
-    <h2>Imprimir Reportes</h2>
+  <div id="reportes">
+    <h2>Reportes</h2>
     <div class="btn-group">
-      <button class="active">Imprimir Todo</button>
-      <button>Carros Particulares</button>
-      <button>Motos</button>
-      <button>Busetas</button>
-      <button>Turbos</button>
-      <button>Pintores/Mecánicos</button>
+      <button onclick="generarReporteDiario()">Reporte Diario</button>
+      <button onclick="generarReporteMensual()">Reporte Mensual</button>
+      <button onclick="generarReporteGeneral()">Reporte General</button>
+      <button onclick="imprimirReporte()">Imprimir Reporte</button>
     </div>
-    <h2>Reporte Mensual</h2>
-    <input type="month" id="mesReporte">
-    <button>Generar Reporte Mensual</button>
+
+    <table id="tablaReporteDiario">
+      <thead>
+        <tr>
+          <th>Placa</th>
+          <th>Tipo</th>
+          <th>Propietario</th>
+          <th>Ingreso</th>
+          <th>Salida</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <table id="tablaReporteMensual">
+      <thead>
+        <tr>
+          <th>Placa</th>
+          <th>Tipo</th>
+          <th>Propietario</th>
+          <th>Ingreso</th>
+          <th>Salida</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <table id="tablaReporteGeneral">
+      <thead>
+        <tr>
+          <th>Placa</th>
+          <th>Tipo</th>
+          <th>Propietario</th>
+          <th>Ingreso</th>
+          <th>Salida</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
   </div>
 
   <script src="app.js"></script>
