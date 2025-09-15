@@ -9,13 +9,14 @@
     body { font-family: Arial, sans-serif; background: #f5f5f5; padding: 20px; }
     h1 { text-align: center; }
     #preview { margin: 20px 0; max-width: 100%; }
-    table { border-collapse: collapse; width: 100%; margin-top: 20px; background: #fff; }
+    table { border-collapse: collapse; width: 100%; margin: 20px 0; background: #fff; }
     th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
     th { background: #3b82f6; color: white; }
     td { background: #fafafa; }
-    td[contenteditable="true"] { background: #fff3cd; } /* celdas editables en amarillo */
+    td[contenteditable="true"] { background: #fff3cd; }
     .btn { background: #3b82f6; color: white; padding: 10px 15px; border: none; border-radius: 6px; cursor: pointer; margin: 5px; }
     .btn:hover { background: #2563eb; }
+    h2 { margin-top: 30px; color: #1f2937; }
   </style>
 </head>
 <body>
@@ -45,7 +46,6 @@
       const file = event.target.files[0];
       if (!file) return;
 
-      // Mostrar vista previa
       const reader = new FileReader();
       reader.onload = e => preview.src = e.target.result;
       reader.readAsDataURL(file);
@@ -53,20 +53,20 @@
       loading.style.display = "block";
       resultado.innerHTML = "";
 
-      // OCR con Tesseract
-      const { data: { text } } = await Tesseract.recognize(file, 'spa'); // español
+      const { data: { text } } = await Tesseract.recognize(file, 'spa');
       console.log("Texto detectado:", text);
 
-      // Procesar texto a tabla
-      convertirATabla(text);
+      convertirATablas(text);
       loading.style.display = "none";
       descargarBtn.style.display = "inline-block";
     });
 
-    function convertirATabla(texto) {
-      const lineas = texto.split("\n").filter(l => l.trim() !== "");
+    function crearTabla(titulo, filas, id) {
+      if (filas.length === 0) return "";
+
       let tabla = `
-        <table id="tabla-datos">
+        <h2>${titulo}</h2>
+        <table id="${id}">
           <tr>
             <th>#</th>
             <th>Propietario</th>
@@ -75,8 +75,7 @@
           </tr>
       `;
 
-      lineas.forEach((linea, i) => {
-        const partes = linea.split(/\s+/); // separar por espacios
+      filas.forEach((partes, i) => {
         let propietario = partes[1] || "";
         let placa = partes[2] || "";
         let pago = partes.slice(3).join(" ") || "";
@@ -92,20 +91,60 @@
       });
 
       tabla += "</table>";
-      resultado.innerHTML = tabla;
+      return tabla;
     }
 
-    // Descargar tabla en CSV
-    descargarBtn.addEventListener("click", () => {
-      const tabla = document.getElementById("tabla-datos");
-      let csv = [];
-      for (let fila of tabla.rows) {
-        let celdas = [];
-        for (let celda of fila.cells) {
-          celdas.push(celda.innerText.replace(/,/g, "")); // quitar comas
+    function convertirATablas(texto) {
+      const lineas = texto.split("\n").filter(l => l.trim() !== "");
+      
+      const busetas = [];
+      const carros = [];
+      const motos = [];
+      const pintores = [];
+      const otros = [];
+
+      lineas.forEach(linea => {
+        const partes = linea.split(/\s+/);
+        const lower = linea.toLowerCase();
+        if (lower.includes("buseta")) {
+          busetas.push(partes);
+        } else if (lower.includes("carro")) {
+          carros.push(partes);
+        } else if (lower.includes("moto")) {
+          motos.push(partes);
+        } else if (lower.includes("pintor")) {
+          pintores.push(partes);
+        } else {
+          otros.push(partes);
         }
-        csv.push(celdas.join(","));
-      }
+      });
+
+      let html = "";
+      html += crearTabla("🚌 Busetas", busetas, "tabla-busetas");
+      html += crearTabla("🚗 Carros", carros, "tabla-carros");
+      html += crearTabla("🏍️ Motos", motos, "tabla-motos");
+      html += crearTabla("🎨 Pintores", pintores, "tabla-pintores");
+      html += crearTabla("📦 Otros", otros, "tabla-otros");
+
+      resultado.innerHTML = html;
+    }
+
+    descargarBtn.addEventListener("click", () => {
+      const tablas = document.querySelectorAll("table");
+      let csv = [];
+
+      tablas.forEach((tabla) => {
+        csv.push("");
+        csv.push(tabla.previousElementSibling.innerText);
+        for (let fila of tabla.rows) {
+          let celdas = [];
+          for (let celda of fila.cells) {
+            celdas.push(celda.innerText.replace(/,/g, ""));
+          }
+          csv.push(celdas.join(","));
+        }
+      });
+
       const csvBlob = new Blob([csv.join("\n")], { type: "text/csv" });
       const url = URL.createObjectURL(csvBlob);
       const a = document.createElement("a");
