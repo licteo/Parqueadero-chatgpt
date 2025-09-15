@@ -12,7 +12,10 @@
     table { border-collapse: collapse; width: 100%; margin-top: 20px; background: #fff; }
     th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
     th { background: #3b82f6; color: white; }
-    .btn { background: #3b82f6; color: white; padding: 10px 15px; border: none; border-radius: 6px; cursor: pointer; }
+    td { background: #fafafa; }
+    td[contenteditable="true"] { background: #fff3cd; } /* celdas editables en amarillo */
+    .btn { background: #3b82f6; color: white; padding: 10px 15px; border: none; border-radius: 6px; cursor: pointer; margin: 5px; }
+    .btn:hover { background: #2563eb; }
   </style>
 </head>
 <body>
@@ -24,6 +27,11 @@
   <img id="preview" alt="Vista previa" />
 
   <div id="loading" style="display:none;">⏳ Procesando imagen...</div>
+  
+  <div>
+    <button class="btn" id="descargar-btn" style="display:none;">⬇️ Descargar CSV</button>
+  </div>
+  
   <div id="resultado"></div>
 
   <script>
@@ -31,6 +39,7 @@
     const preview = document.getElementById("preview");
     const loading = document.getElementById("loading");
     const resultado = document.getElementById("resultado");
+    const descargarBtn = document.getElementById("descargar-btn");
 
     fotoInput.addEventListener("change", async (event) => {
       const file = event.target.files[0];
@@ -45,18 +54,19 @@
       resultado.innerHTML = "";
 
       // OCR con Tesseract
-      const { data: { text } } = await Tesseract.recognize(file, 'spa'); // idioma español
+      const { data: { text } } = await Tesseract.recognize(file, 'spa'); // español
       console.log("Texto detectado:", text);
 
       // Procesar texto a tabla
       convertirATabla(text);
       loading.style.display = "none";
+      descargarBtn.style.display = "inline-block";
     });
 
     function convertirATabla(texto) {
       const lineas = texto.split("\n").filter(l => l.trim() !== "");
       let tabla = `
-        <table>
+        <table id="tabla-datos">
           <tr>
             <th>#</th>
             <th>Propietario</th>
@@ -74,9 +84,9 @@
         tabla += `
           <tr>
             <td>${i + 1}</td>
-            <td>${propietario}</td>
-            <td>${placa}</td>
-            <td>${pago}</td>
+            <td contenteditable="true">${propietario}</td>
+            <td contenteditable="true">${placa}</td>
+            <td contenteditable="true">${pago}</td>
           </tr>
         `;
       });
@@ -84,6 +94,26 @@
       tabla += "</table>";
       resultado.innerHTML = tabla;
     }
+
+    // Descargar tabla en CSV
+    descargarBtn.addEventListener("click", () => {
+      const tabla = document.getElementById("tabla-datos");
+      let csv = [];
+      for (let fila of tabla.rows) {
+        let celdas = [];
+        for (let celda of fila.cells) {
+          celdas.push(celda.innerText.replace(/,/g, "")); // quitar comas
+        }
+        csv.push(celdas.join(","));
+      }
+      const csvBlob = new Blob([csv.join("\n")], { type: "text/csv" });
+      const url = URL.createObjectURL(csvBlob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "parqueadero.csv";
+      a.click();
+      URL.revokeObjectURL(url);
+    });
   </script>
 
 </body>
